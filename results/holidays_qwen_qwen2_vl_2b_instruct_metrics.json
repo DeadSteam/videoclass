@@ -1,0 +1,153 @@
+{
+  "model": "Qwen/Qwen2-VL-2B-Instruct",
+  "accuracy": 0.525,
+  "top3_accuracy": 0.575,
+  "top5_accuracy": 0.725,
+  "macro_f1": 0.5089015151515152,
+  "macro_precision": 0.6242647058823529,
+  "macro_recall": 0.5249999999999999,
+  "per_class": {
+    "Halloween": {
+      "precision": 0.6,
+      "recall": 0.6,
+      "f1": 0.6,
+      "support": 5
+    },
+    "Christmas": {
+      "precision": 0.29411764705882354,
+      "recall": 1.0,
+      "f1": 0.45454545454545453,
+      "support": 5
+    },
+    "Easter": {
+      "precision": 0.75,
+      "recall": 0.6,
+      "f1": 0.6666666666666666,
+      "support": 5
+    },
+    "Gift Giving": {
+      "precision": 0.75,
+      "recall": 0.6,
+      "f1": 0.6666666666666666,
+      "support": 5
+    },
+    "Valentines Day": {
+      "precision": 0.6,
+      "recall": 0.6,
+      "f1": 0.6,
+      "support": 5
+    },
+    "Thanksgiving": {
+      "precision": 1.0,
+      "recall": 0.6,
+      "f1": 0.75,
+      "support": 5
+    },
+    "Saint Patrick's Day": {
+      "precision": 1.0,
+      "recall": 0.2,
+      "f1": 0.3333333333333333,
+      "support": 5
+    },
+    "Mother's Day": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 5
+    }
+  },
+  "confusion_matrix": [
+    [
+      3,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      5,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      3,
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      2,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      1,
+      3,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      1,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0
+    ],
+    [
+      0,
+      3,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      4,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ]
+  ],
+  "class_names": [
+    "Halloween",
+    "Christmas",
+    "Easter",
+    "Gift Giving",
+    "Valentines Day",
+    "Thanksgiving",
+    "Saint Patrick's Day",
+    "Mother's Day"
+  ],
+  "total_samples": 40,
+  "timestamp": "2025-12-23T22:16:04.599793"
+}

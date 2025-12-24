@@ -1,0 +1,242 @@
+[
+  {
+    "video_id": "ON92dsc57DU",
+    "true_label": "Halloween",
+    "predicted_label": "Halloween",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "cEU-boHJCCI",
+    "true_label": "Halloween",
+    "predicted_label": "Halloween",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "jCr2smBPOa0",
+    "true_label": "Halloween",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "ivVaNrPPj-g",
+    "true_label": "Halloween",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "zRM6nl9k2qc",
+    "true_label": "Halloween",
+    "predicted_label": "Halloween",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "bweuuuhLirI",
+    "true_label": "Christmas",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "owozXHYNBA0",
+    "true_label": "Christmas",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "-jk8AlqGrwI",
+    "true_label": "Christmas",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "ZqtG-cXa_b8",
+    "true_label": "Christmas",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "3PVXy01JTzE",
+    "true_label": "Christmas",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "n2-XWpIwVSI",
+    "true_label": "Easter",
+    "predicted_label": "Valentines Day",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "cwVhAUbQQEo",
+    "true_label": "Easter",
+    "predicted_label": "Mother's Day",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "DM6prleKvFI",
+    "true_label": "Easter",
+    "predicted_label": "Easter",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "ewGu8AovspM",
+    "true_label": "Easter",
+    "predicted_label": "Easter",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "cW1gp0oG9DY",
+    "true_label": "Easter",
+    "predicted_label": "Easter",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "bOtF61x7jRI",
+    "true_label": "Gift Giving",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "sbwsIj7c0Wk",
+    "true_label": "Gift Giving",
+    "predicted_label": "Gift Giving",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "mHGrGegOe_8",
+    "true_label": "Gift Giving",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "ewsOANgmIv0",
+    "true_label": "Gift Giving",
+    "predicted_label": "Gift Giving",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "r1jCsAnz4gw",
+    "true_label": "Gift Giving",
+    "predicted_label": "Gift Giving",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "Retmjp-b0NE",
+    "true_label": "Valentines Day",
+    "predicted_label": "Halloween",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "kShjYwK35TE",
+    "true_label": "Valentines Day",
+    "predicted_label": "Valentines Day",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "kY01OwLmjps",
+    "true_label": "Valentines Day",
+    "predicted_label": "Valentines Day",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "Eli7pf74QOE",
+    "true_label": "Valentines Day",
+    "predicted_label": "Gift Giving",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "mx1vv6QDRdQ",
+    "true_label": "Valentines Day",
+    "predicted_label": "Valentines Day",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "ws9pXbYK4Hw",
+    "true_label": "Thanksgiving",
+    "predicted_label": "Thanksgiving",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "3uO4aCw2vbw",
+    "true_label": "Thanksgiving",
+    "predicted_label": "Halloween",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "6IMutmrxaB0",
+    "true_label": "Thanksgiving",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "W1sJRixMzk0",
+    "true_label": "Thanksgiving",
+    "predicted_label": "Thanksgiving",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "1ptf9SwDk1U",
+    "true_label": "Thanksgiving",
+    "predicted_label": "Thanksgiving",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "_2aib7eCGrs",
+    "true_label": "Saint Patrick's Day",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "Tu3kwNzVlnY",
+    "true_label": "Saint Patrick's Day",
+    "predicted_label": "Easter",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "EgQjzeRknv8",
+    "true_label": "Saint Patrick's Day",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "zJDvCLNilqg",
+    "true_label": "Saint Patrick's Day",
+    "predicted_label": "Saint Patrick's Day",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "0hVahHq5NUI",
+    "true_label": "Saint Patrick's Day",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "hHm6MoN7MzQ",
+    "true_label": "Mother's Day",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "yjpZ9LigVqA",
+    "true_label": "Mother's Day",
+    "predicted_label": "Valentines Day",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "88XQcpU5Vuk",
+    "true_label": "Mother's Day",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "dlg70tlPGdE",
+    "true_label": "Mother's Day",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  },
+  {
+    "video_id": "W1ILjqzdjqI",
+    "true_label": "Mother's Day",
+    "predicted_label": "Christmas",
+    "confidence": 1.0
+  }
+]

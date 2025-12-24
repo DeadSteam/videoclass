@@ -1,0 +1,65 @@
+{
+  "model": "Qwen/Qwen2-VL-2B-Instruct",
+  "n_samples": 40,
+  "n_shot": 5,
+  "categories": 8,
+  "random_state": 42,
+  "zero_shot": {
+    "accuracy": 0.525,
+    "top3_accuracy": 0.575,
+    "top5_accuracy": 0.725,
+    "macro_f1": 0.5089015151515152,
+    "macro_precision": 0.6242647058823529,
+    "macro_recall": 0.5249999999999999
+  },
+  "few_shot": {
+    "accuracy": 0.325,
+    "top3_accuracy": 0.425,
+    "top5_accuracy": 0.625,
+    "macro_f1": 0.28422619047619047,
+    "macro_precision": 0.36458333333333337,
+    "macro_recall": 0.325
+  },
+  "per_class_comparison": {
+    "Halloween": {
+      "zero_shot_f1": 0.6,
+      "few_shot_f1": 0.75,
+      "difference": 0.15000000000000002
+    },
+    "Christmas": {
+      "zero_shot_f1": 0.45454545454545453,
+      "few_shot_f1": 0.2857142857142857,
+      "difference": -0.16883116883116883
+    },
+    "Easter": {
+      "zero_shot_f1": 0.6666666666666666,
+      "few_shot_f1": 0.6666666666666666,
+      "difference": 0.0
+    },
+    "Gift Giving": {
+      "zero_shot_f1": 0.6666666666666666,
+      "few_shot_f1": 0.0,
+      "difference": -0.6666666666666666
+    },
+    "Valentines Day": {
+      "zero_shot_f1": 0.6,
+      "few_shot_f1": 0.5714285714285714,
+      "difference": -0.02857142857142858
+    },
+    "Thanksgiving": {
+      "zero_shot_f1": 0.75,
+      "few_shot_f1": 0.0,
+      "difference": -0.75
+    },
+    "Saint Patrick's Day": {
+      "zero_shot_f1": 0.3333333333333333,
+      "few_shot_f1": 0.0,
+      "difference": -0.3333333333333333
+    },
+    "Mother's Day": {
+      "zero_shot_f1": 0.0,
+      "few_shot_f1": 0.0,
+      "difference": 0.0
+    }
+  }
+}

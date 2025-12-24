@@ -62,13 +62,13 @@
   {
     "video_id": "n2-XWpIwVSI",
     "true_label": "Easter",
-    "predicted_label": "Valentines Day",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
     "video_id": "cwVhAUbQQEo",
     "true_label": "Easter",
-    "predicted_label": "Mother's Day",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
@@ -98,7 +98,7 @@
   {
     "video_id": "sbwsIj7c0Wk",
     "true_label": "Gift Giving",
-    "predicted_label": "Gift Giving",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
@@ -110,19 +110,19 @@
   {
     "video_id": "ewsOANgmIv0",
     "true_label": "Gift Giving",
-    "predicted_label": "Gift Giving",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
     "video_id": "r1jCsAnz4gw",
     "true_label": "Gift Giving",
-    "predicted_label": "Gift Giving",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
     "video_id": "Retmjp-b0NE",
     "true_label": "Valentines Day",
-    "predicted_label": "Halloween",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
@@ -134,7 +134,7 @@
   {
     "video_id": "kY01OwLmjps",
     "true_label": "Valentines Day",
-    "predicted_label": "Valentines Day",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
@@ -152,13 +152,13 @@
   {
     "video_id": "ws9pXbYK4Hw",
     "true_label": "Thanksgiving",
-    "predicted_label": "Thanksgiving",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
     "video_id": "3uO4aCw2vbw",
     "true_label": "Thanksgiving",
-    "predicted_label": "Halloween",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
@@ -170,13 +170,13 @@
   {
     "video_id": "W1sJRixMzk0",
     "true_label": "Thanksgiving",
-    "predicted_label": "Thanksgiving",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
     "video_id": "1ptf9SwDk1U",
     "true_label": "Thanksgiving",
-    "predicted_label": "Thanksgiving",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
@@ -200,7 +200,7 @@
   {
     "video_id": "zJDvCLNilqg",
     "true_label": "Saint Patrick's Day",
-    "predicted_label": "Saint Patrick's Day",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {
@@ -218,7 +218,7 @@
   {
     "video_id": "yjpZ9LigVqA",
     "true_label": "Mother's Day",
-    "predicted_label": "Valentines Day",
+    "predicted_label": "Christmas",
     "confidence": 1.0
   },
   {

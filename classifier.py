@@ -2,7 +2,7 @@
 Qwen2-VL based classifier for holiday videos
 """
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from PIL import Image
 
 import torch
@@ -66,7 +66,8 @@ class Qwen2VLClassifier:
         self, 
         image: Image.Image, 
         categories: List[str],
-        method: str = "zero_shot"
+        method: str = "zero_shot",
+        support_examples: Optional[List[Tuple[Image.Image, str]]] = None
     ) -> Tuple[str, float, List[Tuple[str, float]]]:
         """
         Classify an image into one of the categories
@@ -74,7 +75,8 @@ class Qwen2VLClassifier:
         Args:
             image: PIL Image to classify
             categories: List of category names
-            method: Classification method (currently only zero_shot supported)
+            method: Classification method ("zero_shot" or "few_shot")
+            support_examples: List of (image, label) tuples for few-shot learning
             
         Returns:
             Tuple of (predicted_label, confidence, top_k_predictions)
@@ -85,7 +87,47 @@ class Qwen2VLClassifier:
         # Create classification prompt
         category_list = "\n".join([f"{i+1}. {cat}" for i, cat in enumerate(categories)])
         
-        prompt = f"""Look at this image and determine which holiday category it belongs to.
+        # Prepare messages for Qwen2-VL
+        messages = []
+        
+        # Few-Shot Learning: Add support examples first
+        if method == "few_shot" and support_examples:
+            examples_text = "Here are some examples:\n\n"
+            support_content = []
+            
+            for i, (support_img, support_label) in enumerate(support_examples):
+                support_img_resized = support_img.resize((384, 384), Image.LANCZOS)
+                support_content.append({"type": "image", "image": support_img_resized})
+                examples_text += f"Example {i+1}: This is a {support_label} image.\n"
+            
+            # Add examples message
+            messages.append({
+                "role": "user",
+                "content": support_content + [{"type": "text", "text": examples_text}]
+            })
+            
+            # Add assistant response acknowledging examples
+            messages.append({
+                "role": "assistant",
+                "content": "I understand. I'll use these examples to classify the new image."
+            })
+        
+        # Main classification prompt
+        if method == "few_shot" and support_examples:
+            prompt = f"""Now classify this new image using the examples above as reference.
+
+Categories:
+{category_list}
+
+Based on the examples, determine which holiday category this image belongs to. Look for similar:
+- Colors (orange/black for Halloween, red/green for Christmas, pastels for Easter, etc.)
+- Objects (pumpkins, Christmas trees, Easter eggs, hearts, turkeys, shamrocks, etc.)
+- Decorations and themes
+
+Respond with ONLY the category name that best matches the image. Just the category name, nothing else."""
+        else:
+            # Zero-Shot prompt
+            prompt = f"""Look at this image and determine which holiday category it belongs to.
 
 Categories:
 {category_list}
@@ -97,25 +139,31 @@ Analyze the image carefully. Look for:
 
 Respond with ONLY the category name that best matches the image. Just the category name, nothing else."""
 
-        # Prepare messages for Qwen2-VL
-        messages = [
-            {
-                "role": "user",
-                "content": [
-                    {"type": "image", "image": image},
-                    {"type": "text", "text": prompt}
-                ]
-            }
-        ]
+        # Add classification message
+        messages.append({
+            "role": "user",
+            "content": [
+                {"type": "image", "image": image},
+                {"type": "text", "text": prompt}
+            ]
+        })
         
         # Process input
+        # For few-shot, we need to handle multiple images
+        if method == "few_shot" and support_examples:
+            # Collect all images (support + query)
+            all_images = [img.resize((384, 384), Image.LANCZOS) for img, _ in support_examples]
+            all_images.append(image)
+        else:
+            all_images = [image]
+        
         text = self.processor.apply_chat_template(
             messages, tokenize=False, add_generation_prompt=True
         )
         
         inputs = self.processor(
             text=[text],
-            images=[image],
+            images=all_images,
             padding=True,
             return_tensors="pt"
         ).to(self.device)

@@ -10,6 +10,7 @@ import argparse
 import torch
 
 from experiment import run_experiment, save_results
+from compare_methods import compare_methods
 
 
 def main():
@@ -21,6 +22,9 @@ def main():
     parser.add_argument("--n_samples", type=int, default=80, help="Number of test samples")
     parser.add_argument("--categories", type=int, default=8, help="Number of categories")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    parser.add_argument("--compare", action="store_true", help="Compare Zero-Shot vs Few-Shot")
+    parser.add_argument("--method", type=str, choices=["zero_shot", "few_shot"], 
+                       default="few_shot", help="Classification method")
     
     args = parser.parse_args()
     
@@ -37,18 +41,28 @@ def main():
     else:
         print("\n  WARNING: No GPU detected! Using CPU (will be slow)")
     
-    # Run experiment
-    metrics, results = run_experiment(
-        model_name=args.model,
-        n_samples=args.n_samples,
-        top_categories=args.categories,
-        random_state=args.seed
-    )
-    
-    # Save results
-    save_results(metrics, results)
-    
-    print("\n[OK] Experiment completed!")
+    # Run comparison or single experiment
+    if args.compare:
+        compare_methods(
+            model_name=args.model,
+            n_samples=args.n_samples,
+            top_categories=args.categories,
+            random_state=args.seed
+        )
+    else:
+        # Run single experiment
+        metrics, results = run_experiment(
+            model_name=args.model,
+            n_samples=args.n_samples,
+            top_categories=args.categories,
+            random_state=args.seed,
+            method=args.method
+        )
+        
+        # Save results
+        save_results(metrics, results)
+        
+        print("\n[OK] Experiment completed!")
 
 
 if __name__ == "__main__":

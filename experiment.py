@@ -20,7 +20,8 @@ def run_experiment(
     n_samples: int = 80,
     n_shot: int = 5,
     top_categories: int = 8,
-    random_state: int = 42
+    random_state: int = 42,
+    method: str = "few_shot"
 ) -> Tuple[ExperimentMetrics, List[ClassificationResult]]:
     """
     Run classification experiment with Qwen2-VL
@@ -38,6 +39,7 @@ def run_experiment(
     print("\n" + "="*70)
     print("  HOLIDAYS CLASSIFICATION WITH QWEN2-VL")
     print(f"  Model: {model_name}")
+    print(f"  Method: {method.upper()}")
     print(f"  Samples: {n_samples}")
     print("="*70 + "\n")
     
@@ -64,6 +66,25 @@ def run_experiment(
     # Load Qwen2-VL model
     classifier = Qwen2VLClassifier(model_name=model_name)
     
+    # Prepare few-shot examples: load support set thumbnails (only if using few-shot)
+    support_examples_by_category = {}
+    
+    if method == "few_shot":
+        print(f"\n[*] Loading {len(support_df)} support examples for few-shot learning...")
+        for idx, row in support_df.iterrows():
+            video_id = row['video_id']
+            category = row['category_2']
+            
+            thumbnail = dataset.download_thumbnail(video_id)
+            if thumbnail is None:
+                thumbnail = Image.new('RGB', (384, 384), color='gray')
+            
+            if category not in support_examples_by_category:
+                support_examples_by_category[category] = []
+            support_examples_by_category[category].append((thumbnail, category))
+        
+        print(f"  [+] Loaded examples for {len(support_examples_by_category)} categories")
+    
     # Run classification
     print(f"\n[*] Classifying {len(query_df)} query samples...")
     results = []
@@ -78,8 +99,21 @@ def run_experiment(
         if thumbnail is None:
             thumbnail = Image.new('RGB', (384, 384), color='gray')
         
+        # Prepare examples based on method
+        support_examples = []
+        if method == "few_shot":
+            # Use all support examples
+            for cat in subcategories:
+                if cat in support_examples_by_category:
+                    support_examples.extend(support_examples_by_category[cat])
+        
         # Classify
-        pred_label, conf, top_k = classifier.classify_image(thumbnail, subcategories)
+        pred_label, conf, top_k = classifier.classify_image(
+            thumbnail, 
+            subcategories,
+            method=method,
+            support_examples=support_examples if method == "few_shot" else None
+        )
         
         results.append(ClassificationResult(
             video_id=video_id,

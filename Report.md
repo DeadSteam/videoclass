@@ -170,13 +170,21 @@ $$P(y_i|x) = \frac{\exp(sim(f(x), g(y_i)) / \tau)}{\sum_{j=1}^{K} \exp(sim(f(x),
 
 ### 2.2 Структура проекта
 
+Проект организован в модульную структуру для улучшения читаемости и поддерживаемости кода:
+
 ```
 videoclass/
-├── main.py                  # Основной скрипт классификации
+├── main.py                  # Точка входа, парсинг аргументов
+├── models.py                # Модели данных (ClassificationResult, ExperimentMetrics)
+├── dataset.py               # Класс HolidaysDataset для работы с датасетом
+├── classifier.py            # Класс Qwen2VLClassifier для классификации
+├── metrics.py               # Функции вычисления метрик
+├── experiment.py            # Функции запуска экспериментов и сохранения результатов
+│
 ├── Report.md                # Данный отчёт
 ├── requirements.txt         # Зависимости Python
 │
-├── HowTo100M/               # Датасет
+├── HowTo100M/               # Датасет (в .gitignore)
 │   ├── HowTo100M_v1.csv     # Метаданные видео (1.2M записей)
 │   ├── task_ids.csv         # Маппинг задач
 │   ├── caption.json         # Субтитры видео
@@ -186,85 +194,124 @@ videoclass/
 │   ├── holidays_qwen_*_metrics.json      # Метрики
 │   └── holidays_qwen_*_predictions.json  # Предсказания
 │
-└── thumbnail_cache/         # Кэш загруженных изображений
+└── thumbnail_cache/         # Кэш загруженных изображений (в .gitignore)
     └── [hash]/[video_id].jpg
 ```
 
+**Описание модулей:**
+
+- **`main.py`** — точка входа в программу, содержит функцию `main()` для парсинга аргументов командной строки и запуска эксперимента
+- **`models.py`** — определяет структуры данных:
+  - `ClassificationResult` — результат классификации одного видео
+  - `ExperimentMetrics` — метрики эксперимента
+- **`dataset.py`** — класс `HolidaysDataset`:
+  - Загрузка и фильтрация данных из CSV
+  - Сэмплирование для few-shot обучения
+  - Загрузка и кэширование миниатюр YouTube
+- **`classifier.py`** — класс `Qwen2VLClassifier`:
+  - Инициализация модели Qwen2-VL
+  - Классификация изображений (zero-shot)
+  - Парсинг ответов модели
+- **`metrics.py`** — функция `compute_metrics()`:
+  - Вычисление accuracy, precision, recall, F1-score
+  - Построение confusion matrix
+  - Top-K accuracy
+- **`experiment.py`** — функции:
+  - `run_experiment()` — запуск полного эксперимента
+  - `save_results()` — сохранение результатов в JSON
+
+Такая модульная структура обеспечивает:
+- Разделение ответственности (separation of concerns)
+- Легкость тестирования отдельных компонентов
+- Возможность переиспользования модулей
+- Улучшенную читаемость и поддерживаемость кода
+
 ### 2.3 Алгоритм классификации
 
-#### 2.3.1 Загрузка и фильтрация данных
+#### 2.3.1 Загрузка и фильтрация данных (dataset.py)
 
 ```python
-def load_holidays_data():
-    # 1. Загрузка метаданных
-    df = pd.read_csv("HowTo100M/HowTo100M_v1.csv")
-    
-    # 2. Фильтрация по категории Holidays
-    holidays_df = df[df['category_1'] == 'Holidays and Traditions']
-    
-    # 3. Выборка подкатегорий с достаточным количеством данных
-    subcategories = holidays_df['category_2'].value_counts()
-    valid_categories = subcategories[subcategories >= 50].index
-    
-    return holidays_df[holidays_df['category_2'].isin(valid_categories)]
+from dataset import HolidaysDataset
+
+# Инициализация и загрузка датасета
+dataset = HolidaysDataset(root_path="HowTo100M")
+dataset.load()  # Загружает и фильтрует данные
+
+# Получение подкатегорий с достаточным количеством данных
+subcategories = dataset.get_subcategories()  # Автоматически фильтрует >= 50 видео
+
+# Сэмплирование для few-shot обучения
+support_df, query_df = dataset.sample_for_classification(
+    subcategories=subcategories,
+    n_samples=80,
+    n_shot=5,
+    random_state=42
+)
 ```
 
-#### 2.3.2 Загрузка визуальных данных
+#### 2.3.2 Загрузка визуальных данных (dataset.py)
 
 ```python
-def download_thumbnail(video_id: str) -> Image:
-    # URL форматы YouTube thumbnail
-    urls = [
-        f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg",
-        f"https://img.youtube.com/vi/{video_id}/sddefault.jpg",
-        f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg",
-    ]
-    
-    for url in urls:
-        response = requests.get(url, timeout=10)
-        if response.status_code == 200:
-            image = Image.open(BytesIO(response.content))
-            if image.size[0] > 200:  # Проверка на placeholder
-                return image.convert("RGB")
-    
-    return None
+# Загрузка миниатюры с автоматическим кэшированием
+thumbnail = dataset.download_thumbnail(video_id)
+
+# Метод автоматически:
+# 1. Проверяет кэш по хэшу video_id
+# 2. Пробует разные URL форматы YouTube
+# 3. Сохраняет в кэш для повторного использования
 ```
 
-#### 2.3.3 Zero-Shot классификация с Qwen2-VL
+#### 2.3.3 Zero-Shot классификация с Qwen2-VL (classifier.py)
 
 ```python
-def classify_image(image: Image, categories: List[str]) -> str:
-    # 1. Формирование промпта для классификации
-    prompt = f"""Look at this image and determine which holiday 
-    category it belongs to.
-    
-    Categories:
-    1. Halloween - pumpkins, costumes, spooky decorations
-    2. Christmas - Christmas tree, Santa, gifts, snow
-    3. Easter - Easter eggs, bunny, spring decorations
-    4. Gift Giving - gift wrapping, presents, ribbons
-    5. Valentines Day - hearts, romantic, red/pink colors
-    6. Thanksgiving - turkey, fall decorations, harvest
-    7. Saint Patrick's Day - green, shamrocks, Irish theme
-    8. Mother's Day - flowers, gifts for mom
-    
-    Respond with ONLY the category name."""
-    
-    # 2. Подготовка входных данных для модели
-    messages = [
-        {"role": "user", "content": [
-            {"type": "image", "image": image},
-            {"type": "text", "text": prompt}
-        ]}
-    ]
-    
-    # 3. Генерация ответа
-    inputs = processor(messages, return_tensors="pt").to(device)
-    output = model.generate(**inputs, max_new_tokens=50)
-    response = processor.decode(output[0], skip_special_tokens=True)
-    
-    # 4. Извлечение категории из ответа
-    return match_category(response, categories)
+from classifier import Qwen2VLClassifier
+
+# Инициализация классификатора
+classifier = Qwen2VLClassifier(model_name="Qwen/Qwen2-VL-2B-Instruct")
+
+# Классификация изображения
+predicted_label, confidence, top_k = classifier.classify_image(
+    image=thumbnail,
+    categories=subcategories,
+    method="zero_shot"
+)
+
+# Метод автоматически:
+# 1. Формирует промпт с описаниями категорий
+# 2. Подготавливает входные данные для модели
+# 3. Генерирует ответ через Qwen2-VL
+# 4. Парсит ответ и сопоставляет с категориями
+```
+
+#### 2.3.4 Запуск полного эксперимента (experiment.py)
+
+```python
+from experiment import run_experiment, save_results
+
+# Запуск эксперимента
+metrics, results = run_experiment(
+    model_name="Qwen/Qwen2-VL-2B-Instruct",
+    n_samples=80,
+    n_shot=5,
+    top_categories=8,
+    random_state=42
+)
+
+# Сохранение результатов
+save_results(metrics, results, output_dir="results")
+```
+
+#### 2.3.5 Использование из командной строки (main.py)
+
+```bash
+# Базовый запуск
+python main.py
+
+# С параметрами
+python main.py --model Qwen/Qwen2-VL-2B-Instruct \
+               --n_samples 100 \
+               --categories 8 \
+               --seed 42
 ```
 
 ### 2.4 Текстовые описания категорий

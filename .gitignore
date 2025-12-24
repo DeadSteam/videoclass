@@ -162,4 +162,4 @@ cython_debug/
 
 # Large dataset files
 HowTo100M/
-thumbnail_cache/S
+thumbnail_cache/
